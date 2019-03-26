@@ -3,10 +3,14 @@
 	"version": "1.0.0",
 	"main": "index.js",
 	"scripts": {
-		"start": "nodemon ./server.js",
-		"debug": "nodemon --inspect server.js",
-		"db": "json-server --watch db.json",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"start": "nodemon -e js,graphql -x node src/index.js",
+		"debug": "nodemon -e js,graphql -x node --inspect src/index.js",
+		"test": "jest",
+		"deploy": "prisma deploy",
+		"playground": "graphql playground",
+		"dev": "npm-run-all --parallel debug playground",
+		"dockerup": "docker-compose up -d",
+		"dockerdown": "docker-compose down"
 	},
 	"keywords": [],
 	"author": "",
@@ -17,8 +21,13 @@
 		"cheerio": "^1.0.0-rc.2",
 		"dotenv": "^7.0.0",
 		"express": "^4.16.4",
+		"graphql": "^14.1.1",
+		"graphql-cli": "^3.0.11",
+		"graphql-yoga": "^1.17.4",
 		"lodash": "^4.17.11",
-		"morgan": "^1.9.1"
+		"morgan": "^1.9.1",
+		"prisma": "^1.29.1",
+		"prisma-binding": "^2.3.9"
 	},
 	"devDependencies": {
 		"json-server": "^0.14.2",

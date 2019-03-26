@@ -20,6 +20,7 @@ const LG_BASE = 'https://www.livegamers.fi';
 const lgRelativeUrl = relativeUrl(LG_BASE);
 const getElementHref = fetchElemAttribute('href');
 const getElementSrc = fetchElemAttribute('src');
+const getElementStyle = fetchElemAttribute('style');
 
 ///////////////////////////////////////////////////////////////////////////////
 // HELPER FUNCTIONS
@@ -47,7 +48,7 @@ async function getLgNews() {
 
 	console.log(
 		Promise.all(newsItems).then((data) => {
-			//console.log('promise.all data: ', data);
+			console.log('promise.all data: ', data);
 		})
 	);
 }
@@ -87,9 +88,10 @@ async function getAuthorContentDateImg(newsUrl) {
 	const $ = await fetchHtmlFromUrl(newsUrl);
 	const publishDate = $("meta[property='article:modified_time']").attr('content');
 	const author = formatLGAuthor(fetchElemInnerText($('.hero-area > h4').first()));
-	//const largeImg = .hero-area-elementin backgroundissa on kuva --> style="background-image: url('https://www.livegamers.fi/app/uploads/BFFirestorm-1080x500.jpg')"
+	const styleString = getElementStyle($('.hero-area'));
+	const largeImg = styleString ? styleString.split("'")[1] : '';
 	const content = parseContent($);
-	return { author, content, publishDate };
+	return { author, content, publishDate, largeImg };
 }
 
 function formatLGAuthor(author) {

@@ -1,0 +1,4 @@
+# /**The line below makes all the generate types available in this file**/
+# import * from './generated/prisma.graphql'
+
+# /** The types below will be visible for the client-side **/
