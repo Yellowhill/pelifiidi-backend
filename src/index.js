@@ -2,7 +2,7 @@ require('dotenv').config();
 const logger = require('morgan');
 const createServer = require('./createServer');
 const db = require('./db');
-const getLgNews = require('./app/sites/lg');
+const getLgNews = require('./sites/lg');
 
 const server = createServer();
 server.use(logger('dev'));
