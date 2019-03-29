@@ -24,3 +24,5 @@ services:
       - mongo:/var/lib/mongo
 volumes:
   mongo:
+    external:
+      name: pelifiidi_db

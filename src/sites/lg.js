@@ -80,7 +80,7 @@ function getTitleDescriptionLink($) {
 function getSmallImg($) {
 	const target = $('.article-lift__image-content');
 	return {
-		smallImgUrl: getElementSrc(target.find('img')),
+		smallImg: getElementSrc(target.find('img')),
 	};
 }
 
@@ -90,8 +90,8 @@ async function getAuthorContentDateImg(newsUrl) {
 	const author = formatLGAuthor(fetchElemInnerText($('.hero-area > h4').first()));
 	const styleString = getElementStyle($('.hero-area'));
 	const largeImg = styleString ? styleString.split("'")[1] : '';
-	const content = parseContent($);
-	return { author, content, publishDate, largeImg };
+	const { textContent, embeddedYoutubeLinks } = parseContent($);
+	return { author, embeddedYoutubeLinks, textContent, publishDate, largeImg };
 }
 
 function formatLGAuthor(author) {
@@ -103,10 +103,13 @@ function parseContent($) {
 	const textContentList = Array.from($('.article-content p'));
 	const youtubeContentList = Array.from($('.framecontainer'));
 	const textContent = textContentList.reduce((contentArray, elem, i) => {
-		const $ = cheerio.load(elem);
+		const $ = cheerio.load(diu);
+
+		const inlineLinks = $('a').length > 0 ? getInlineLinkMappings($) : [];
+
 		return contentArray.concat({
 			text: $.text(),
-			link: getElementHref($('a')),
+			inlineLinks,
 		});
 	}, []);
 
@@ -116,8 +119,21 @@ function parseContent($) {
 	});
 
 	return {
-		textContent,
+		textContent: JSON.stringify(textContent),
 		embeddedYoutubeLinks,
 	};
 }
+
+function getInlineLinkMappings(pTag) {
+	return Array.from(pTag('a')).map((elem) => {
+		const anchor = cheerio.load(elem);
+		const linkText = anchor('a').text();
+		const linkUrl = getElementHref(anchor('a'));
+		return { text: linkText, url: linkUrl };
+	});
+}
+
+const diu =
+	'<p> Se selviää <a href="https://www.livegamers.fi/arvostelut/resident-evil-2/">arvostelustamme</a> tai <a href="https://www.livegamers.fi/arvostelut/resident-evil-2-2">paskastamme</a>!</p>';
+
 module.exports = getLgNews;

@@ -1,4 +1,38 @@
 type User {
 	id: ID! @id
 	name: String!
+	email: String! @unique
+	password: String!
+	resetToken: String
+	bookmarks: [Item!]! @relation(link: INLINE)
+}
+
+type Item {
+	id: ID! @id
+	title: String!
+	description: String
+	url: String!
+	smallImg: String
+	largeImg: String
+	author: Author
+	embeddedYoutubeLinks: [String!]!
+	publishDate: DateTime!
+	textContent: [TextContent!]!
+	# textContent: Json!
+}
+
+type TextContent @embedded {
+	text: String!
+	inlineLinks: [InlineLink]!
+}
+
+type InlineLink @embedded {
+	text: String!
+	url: String!
+}
+
+type Author {
+	id: ID! @id
+	name: String!
+	items: [Item!]! @relation(link: INLINE)
 }
