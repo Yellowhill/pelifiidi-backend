@@ -14,7 +14,7 @@ const {
 	extractUrlAttribute,
 	relativeUrl,
 	sanitizeNumber,
-} = require('../helpers');
+} = require('../utils/helpers');
 
 const LG_BASE = 'https://www.livegamers.fi';
 const lgRelativeUrl = relativeUrl(LG_BASE);
@@ -46,11 +46,11 @@ async function getLgNews() {
 		if (i === 2) return await createItemObject(elem);
 	});
 
-	console.log(
-		Promise.all(newsItems).then((data) => {
-			console.log('promise.all data: ', data);
-		})
-	);
+	// console.log(
+	// 	Promise.all(newsItems).then((data) => {
+	// 		console.log('promise.all data: ', data);
+	// 	})
+	// );
 }
 
 async function createItemObject(elem) {

@@ -1,5 +1,5 @@
 # source: http://localhost:4466/pelifiidi/dev
-# timestamp: Thu Mar 28 2019 15:19:53 GMT+0200 (Eastern European Standard Time)
+# timestamp: Fri Mar 29 2019 11:27:43 GMT+0200 (Eastern European Standard Time)
 
 type AggregateAuthor {
   count: Int!
@@ -13,9 +13,14 @@ type AggregateUser {
   count: Int!
 }
 
+type AggregateWebsite {
+  count: Int!
+}
+
 type Author implements Node {
   id: ID!
   name: String!
+  website: Website!
   items(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Item!]
 }
 
@@ -31,7 +36,13 @@ type AuthorConnection {
 
 input AuthorCreateInput {
   name: String!
+  website: WebsiteCreateOneWithoutAuthorsInput!
   items: ItemCreateManyWithoutAuthorInput
+}
+
+input AuthorCreateManyWithoutWebsiteInput {
+  create: [AuthorCreateWithoutWebsiteInput!]
+  connect: [AuthorWhereUniqueInput!]
 }
 
 input AuthorCreateOneWithoutItemsInput {
@@ -41,6 +52,12 @@ input AuthorCreateOneWithoutItemsInput {
 
 input AuthorCreateWithoutItemsInput {
   name: String!
+  website: WebsiteCreateOneWithoutAuthorsInput!
+}
+
+input AuthorCreateWithoutWebsiteInput {
+  name: String!
+  items: ItemCreateManyWithoutAuthorInput
 }
 
 """An edge in a connection."""
@@ -62,6 +79,97 @@ enum AuthorOrderByInput {
 type AuthorPreviousValues {
   id: ID!
   name: String!
+}
+
+input AuthorScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [AuthorScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [AuthorScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [AuthorScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
 }
 
 type AuthorSubscriptionPayload {
@@ -99,29 +207,66 @@ input AuthorSubscriptionWhereInput {
 
 input AuthorUpdateInput {
   name: String
+  website: WebsiteUpdateOneRequiredWithoutAuthorsInput
   items: ItemUpdateManyWithoutAuthorInput
+}
+
+input AuthorUpdateManyDataInput {
+  name: String
 }
 
 input AuthorUpdateManyMutationInput {
   name: String
 }
 
-input AuthorUpdateOneWithoutItemsInput {
+input AuthorUpdateManyWithoutWebsiteInput {
+  create: [AuthorCreateWithoutWebsiteInput!]
+  connect: [AuthorWhereUniqueInput!]
+  set: [AuthorWhereUniqueInput!]
+  disconnect: [AuthorWhereUniqueInput!]
+  delete: [AuthorWhereUniqueInput!]
+  update: [AuthorUpdateWithWhereUniqueWithoutWebsiteInput!]
+  updateMany: [AuthorUpdateManyWithWhereNestedInput!]
+  deleteMany: [AuthorScalarWhereInput!]
+  upsert: [AuthorUpsertWithWhereUniqueWithoutWebsiteInput!]
+}
+
+input AuthorUpdateManyWithWhereNestedInput {
+  where: AuthorScalarWhereInput!
+  data: AuthorUpdateManyDataInput!
+}
+
+input AuthorUpdateOneRequiredWithoutItemsInput {
   create: AuthorCreateWithoutItemsInput
   connect: AuthorWhereUniqueInput
-  disconnect: Boolean
-  delete: Boolean
   update: AuthorUpdateWithoutItemsDataInput
   upsert: AuthorUpsertWithoutItemsInput
 }
 
 input AuthorUpdateWithoutItemsDataInput {
   name: String
+  website: WebsiteUpdateOneRequiredWithoutAuthorsInput
+}
+
+input AuthorUpdateWithoutWebsiteDataInput {
+  name: String
+  items: ItemUpdateManyWithoutAuthorInput
+}
+
+input AuthorUpdateWithWhereUniqueWithoutWebsiteInput {
+  where: AuthorWhereUniqueInput!
+  data: AuthorUpdateWithoutWebsiteDataInput!
 }
 
 input AuthorUpsertWithoutItemsInput {
   update: AuthorUpdateWithoutItemsDataInput!
   create: AuthorCreateWithoutItemsInput!
+}
+
+input AuthorUpsertWithWhereUniqueWithoutWebsiteInput {
+  where: AuthorWhereUniqueInput!
+  update: AuthorUpdateWithoutWebsiteDataInput!
+  create: AuthorCreateWithoutWebsiteInput!
 }
 
 input AuthorWhereInput {
@@ -207,11 +352,13 @@ input AuthorWhereInput {
 
   """All values not ending with the given string."""
   name_not_ends_with: String
+  website: WebsiteWhereInput
   items_some: ItemWhereInput
 }
 
 input AuthorWhereUniqueInput {
   id: ID
+  name: String
 }
 
 type BatchPayload {
@@ -407,12 +554,13 @@ input InlineLinkWhereInput {
 
 type Item implements Node {
   id: ID!
+  website: Website!
   title: String!
   description: String
   url: String!
   smallImg: String
   largeImg: String
-  author: Author
+  author: Author!
   embeddedYoutubeLinks: [String!]!
   publishDate: DateTime!
   textContent: [TextContent!]
@@ -440,7 +588,8 @@ input ItemCreateInput {
   largeImg: String
   publishDate: DateTime!
   embeddedYoutubeLinks: ItemCreateembeddedYoutubeLinksInput
-  author: AuthorCreateOneWithoutItemsInput
+  website: WebsiteCreateOneWithoutItemsInput!
+  author: AuthorCreateOneWithoutItemsInput!
   textContent: TextContentCreateManyInput
 }
 
@@ -454,6 +603,11 @@ input ItemCreateManyWithoutAuthorInput {
   connect: [ItemWhereUniqueInput!]
 }
 
+input ItemCreateManyWithoutWebsiteInput {
+  create: [ItemCreateWithoutWebsiteInput!]
+  connect: [ItemWhereUniqueInput!]
+}
+
 input ItemCreateWithoutAuthorInput {
   title: String!
   description: String
@@ -462,6 +616,19 @@ input ItemCreateWithoutAuthorInput {
   largeImg: String
   publishDate: DateTime!
   embeddedYoutubeLinks: ItemCreateembeddedYoutubeLinksInput
+  website: WebsiteCreateOneWithoutItemsInput!
+  textContent: TextContentCreateManyInput
+}
+
+input ItemCreateWithoutWebsiteInput {
+  title: String!
+  description: String
+  url: String!
+  smallImg: String
+  largeImg: String
+  publishDate: DateTime!
+  embeddedYoutubeLinks: ItemCreateembeddedYoutubeLinksInput
+  author: AuthorCreateOneWithoutItemsInput!
   textContent: TextContentCreateManyInput
 }
 
@@ -816,7 +983,8 @@ input ItemUpdateDataInput {
   largeImg: String
   publishDate: DateTime
   embeddedYoutubeLinks: ItemUpdateembeddedYoutubeLinksInput
-  author: AuthorUpdateOneWithoutItemsInput
+  website: WebsiteUpdateOneRequiredWithoutItemsInput
+  author: AuthorUpdateOneRequiredWithoutItemsInput
   textContent: TextContentUpdateManyInput
 }
 
@@ -832,7 +1000,8 @@ input ItemUpdateInput {
   largeImg: String
   publishDate: DateTime
   embeddedYoutubeLinks: ItemUpdateembeddedYoutubeLinksInput
-  author: AuthorUpdateOneWithoutItemsInput
+  website: WebsiteUpdateOneRequiredWithoutItemsInput
+  author: AuthorUpdateOneRequiredWithoutItemsInput
   textContent: TextContentUpdateManyInput
 }
 
@@ -880,6 +1049,18 @@ input ItemUpdateManyWithoutAuthorInput {
   upsert: [ItemUpsertWithWhereUniqueWithoutAuthorInput!]
 }
 
+input ItemUpdateManyWithoutWebsiteInput {
+  create: [ItemCreateWithoutWebsiteInput!]
+  connect: [ItemWhereUniqueInput!]
+  set: [ItemWhereUniqueInput!]
+  disconnect: [ItemWhereUniqueInput!]
+  delete: [ItemWhereUniqueInput!]
+  update: [ItemUpdateWithWhereUniqueWithoutWebsiteInput!]
+  updateMany: [ItemUpdateManyWithWhereNestedInput!]
+  deleteMany: [ItemScalarWhereInput!]
+  upsert: [ItemUpsertWithWhereUniqueWithoutWebsiteInput!]
+}
+
 input ItemUpdateManyWithWhereNestedInput {
   where: ItemScalarWhereInput!
   data: ItemUpdateManyDataInput!
@@ -893,6 +1074,19 @@ input ItemUpdateWithoutAuthorDataInput {
   largeImg: String
   publishDate: DateTime
   embeddedYoutubeLinks: ItemUpdateembeddedYoutubeLinksInput
+  website: WebsiteUpdateOneRequiredWithoutItemsInput
+  textContent: TextContentUpdateManyInput
+}
+
+input ItemUpdateWithoutWebsiteDataInput {
+  title: String
+  description: String
+  url: String
+  smallImg: String
+  largeImg: String
+  publishDate: DateTime
+  embeddedYoutubeLinks: ItemUpdateembeddedYoutubeLinksInput
+  author: AuthorUpdateOneRequiredWithoutItemsInput
   textContent: TextContentUpdateManyInput
 }
 
@@ -906,6 +1100,11 @@ input ItemUpdateWithWhereUniqueWithoutAuthorInput {
   data: ItemUpdateWithoutAuthorDataInput!
 }
 
+input ItemUpdateWithWhereUniqueWithoutWebsiteInput {
+  where: ItemWhereUniqueInput!
+  data: ItemUpdateWithoutWebsiteDataInput!
+}
+
 input ItemUpsertWithWhereUniqueNestedInput {
   where: ItemWhereUniqueInput!
   update: ItemUpdateDataInput!
@@ -916,6 +1115,12 @@ input ItemUpsertWithWhereUniqueWithoutAuthorInput {
   where: ItemWhereUniqueInput!
   update: ItemUpdateWithoutAuthorDataInput!
   create: ItemCreateWithoutAuthorInput!
+}
+
+input ItemUpsertWithWhereUniqueWithoutWebsiteInput {
+  where: ItemWhereUniqueInput!
+  update: ItemUpdateWithoutWebsiteDataInput!
+  create: ItemCreateWithoutWebsiteInput!
 }
 
 input ItemWhereInput {
@@ -1183,6 +1388,7 @@ input ItemWhereInput {
 
   """All values greater than or equal the given value."""
   publishDate_gte: DateTime
+  website: WebsiteWhereInput
   author: AuthorWhereInput
   textContent_some: TextContentWhereInput
   textContent_every: TextContentRestrictedWhereInput
@@ -1191,6 +1397,7 @@ input ItemWhereInput {
 
 input ItemWhereUniqueInput {
   id: ID
+  url: String
 }
 
 """
@@ -1201,21 +1408,27 @@ scalar Long
 
 type Mutation {
   createUser(data: UserCreateInput!): User!
+  createWebsite(data: WebsiteCreateInput!): Website!
   createAuthor(data: AuthorCreateInput!): Author!
   createItem(data: ItemCreateInput!): Item!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateWebsite(data: WebsiteUpdateInput!, where: WebsiteWhereUniqueInput!): Website
   updateAuthor(data: AuthorUpdateInput!, where: AuthorWhereUniqueInput!): Author
   updateItem(data: ItemUpdateInput!, where: ItemWhereUniqueInput!): Item
   deleteUser(where: UserWhereUniqueInput!): User
+  deleteWebsite(where: WebsiteWhereUniqueInput!): Website
   deleteAuthor(where: AuthorWhereUniqueInput!): Author
   deleteItem(where: ItemWhereUniqueInput!): Item
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  upsertWebsite(where: WebsiteWhereUniqueInput!, create: WebsiteCreateInput!, update: WebsiteUpdateInput!): Website!
   upsertAuthor(where: AuthorWhereUniqueInput!, create: AuthorCreateInput!, update: AuthorUpdateInput!): Author!
   upsertItem(where: ItemWhereUniqueInput!, create: ItemCreateInput!, update: ItemUpdateInput!): Item!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
+  updateManyWebsites(data: WebsiteUpdateManyMutationInput!, where: WebsiteWhereInput): BatchPayload!
   updateManyAuthors(data: AuthorUpdateManyMutationInput!, where: AuthorWhereInput): BatchPayload!
   updateManyItems(data: ItemUpdateManyMutationInput!, where: ItemWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  deleteManyWebsites(where: WebsiteWhereInput): BatchPayload!
   deleteManyAuthors(where: AuthorWhereInput): BatchPayload!
   deleteManyItems(where: ItemWhereInput): BatchPayload!
 }
@@ -1249,12 +1462,15 @@ type PageInfo {
 
 type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  websites(where: WebsiteWhereInput, orderBy: WebsiteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Website]!
   authors(where: AuthorWhereInput, orderBy: AuthorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Author]!
   items(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Item]!
   user(where: UserWhereUniqueInput!): User
+  website(where: WebsiteWhereUniqueInput!): Website
   author(where: AuthorWhereUniqueInput!): Author
   item(where: ItemWhereUniqueInput!): Item
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  websitesConnection(where: WebsiteWhereInput, orderBy: WebsiteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): WebsiteConnection!
   authorsConnection(where: AuthorWhereInput, orderBy: AuthorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AuthorConnection!
   itemsConnection(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ItemConnection!
 
@@ -1267,6 +1483,7 @@ type Query {
 
 type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  website(where: WebsiteSubscriptionWhereInput): WebsiteSubscriptionPayload
   author(where: AuthorSubscriptionWhereInput): AuthorSubscriptionPayload
   item(where: ItemSubscriptionWhereInput): ItemSubscriptionPayload
 }
@@ -1761,4 +1978,340 @@ input UserWhereInput {
 input UserWhereUniqueInput {
   id: ID
   email: String
+}
+
+type Website implements Node {
+  id: ID!
+  name: String!
+  url: String!
+  logo: String
+  authors(where: AuthorWhereInput, orderBy: AuthorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Author!]
+  items(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Item!]
+}
+
+"""A connection to a list of items."""
+type WebsiteConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [WebsiteEdge]!
+  aggregate: AggregateWebsite!
+}
+
+input WebsiteCreateInput {
+  name: String!
+  url: String!
+  logo: String
+  authors: AuthorCreateManyWithoutWebsiteInput
+  items: ItemCreateManyWithoutWebsiteInput
+}
+
+input WebsiteCreateOneWithoutAuthorsInput {
+  create: WebsiteCreateWithoutAuthorsInput
+  connect: WebsiteWhereUniqueInput
+}
+
+input WebsiteCreateOneWithoutItemsInput {
+  create: WebsiteCreateWithoutItemsInput
+  connect: WebsiteWhereUniqueInput
+}
+
+input WebsiteCreateWithoutAuthorsInput {
+  name: String!
+  url: String!
+  logo: String
+  items: ItemCreateManyWithoutWebsiteInput
+}
+
+input WebsiteCreateWithoutItemsInput {
+  name: String!
+  url: String!
+  logo: String
+  authors: AuthorCreateManyWithoutWebsiteInput
+}
+
+"""An edge in a connection."""
+type WebsiteEdge {
+  """The item at the end of the edge."""
+  node: Website!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum WebsiteOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  url_ASC
+  url_DESC
+  logo_ASC
+  logo_DESC
+}
+
+type WebsitePreviousValues {
+  id: ID!
+  name: String!
+  url: String!
+  logo: String
+}
+
+type WebsiteSubscriptionPayload {
+  mutation: MutationType!
+  node: Website
+  updatedFields: [String!]
+  previousValues: WebsitePreviousValues
+}
+
+input WebsiteSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [WebsiteSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: WebsiteWhereInput
+}
+
+input WebsiteUpdateInput {
+  name: String
+  url: String
+  logo: String
+  authors: AuthorUpdateManyWithoutWebsiteInput
+  items: ItemUpdateManyWithoutWebsiteInput
+}
+
+input WebsiteUpdateManyMutationInput {
+  name: String
+  url: String
+  logo: String
+}
+
+input WebsiteUpdateOneRequiredWithoutAuthorsInput {
+  create: WebsiteCreateWithoutAuthorsInput
+  connect: WebsiteWhereUniqueInput
+  update: WebsiteUpdateWithoutAuthorsDataInput
+  upsert: WebsiteUpsertWithoutAuthorsInput
+}
+
+input WebsiteUpdateOneRequiredWithoutItemsInput {
+  create: WebsiteCreateWithoutItemsInput
+  connect: WebsiteWhereUniqueInput
+  update: WebsiteUpdateWithoutItemsDataInput
+  upsert: WebsiteUpsertWithoutItemsInput
+}
+
+input WebsiteUpdateWithoutAuthorsDataInput {
+  name: String
+  url: String
+  logo: String
+  items: ItemUpdateManyWithoutWebsiteInput
+}
+
+input WebsiteUpdateWithoutItemsDataInput {
+  name: String
+  url: String
+  logo: String
+  authors: AuthorUpdateManyWithoutWebsiteInput
+}
+
+input WebsiteUpsertWithoutAuthorsInput {
+  update: WebsiteUpdateWithoutAuthorsDataInput!
+  create: WebsiteCreateWithoutAuthorsInput!
+}
+
+input WebsiteUpsertWithoutItemsInput {
+  update: WebsiteUpdateWithoutItemsDataInput!
+  create: WebsiteCreateWithoutItemsInput!
+}
+
+input WebsiteWhereInput {
+  """Logical AND on all given filters."""
+  AND: [WebsiteWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  url: String
+
+  """All values that are not equal to given value."""
+  url_not: String
+
+  """All values that are contained in given list."""
+  url_in: [String!]
+
+  """All values that are not contained in given list."""
+  url_not_in: [String!]
+
+  """All values less than the given value."""
+  url_lt: String
+
+  """All values less than or equal the given value."""
+  url_lte: String
+
+  """All values greater than the given value."""
+  url_gt: String
+
+  """All values greater than or equal the given value."""
+  url_gte: String
+
+  """All values containing the given string."""
+  url_contains: String
+
+  """All values not containing the given string."""
+  url_not_contains: String
+
+  """All values starting with the given string."""
+  url_starts_with: String
+
+  """All values not starting with the given string."""
+  url_not_starts_with: String
+
+  """All values ending with the given string."""
+  url_ends_with: String
+
+  """All values not ending with the given string."""
+  url_not_ends_with: String
+  logo: String
+
+  """All values that are not equal to given value."""
+  logo_not: String
+
+  """All values that are contained in given list."""
+  logo_in: [String!]
+
+  """All values that are not contained in given list."""
+  logo_not_in: [String!]
+
+  """All values less than the given value."""
+  logo_lt: String
+
+  """All values less than or equal the given value."""
+  logo_lte: String
+
+  """All values greater than the given value."""
+  logo_gt: String
+
+  """All values greater than or equal the given value."""
+  logo_gte: String
+
+  """All values containing the given string."""
+  logo_contains: String
+
+  """All values not containing the given string."""
+  logo_not_contains: String
+
+  """All values starting with the given string."""
+  logo_starts_with: String
+
+  """All values not starting with the given string."""
+  logo_not_starts_with: String
+
+  """All values ending with the given string."""
+  logo_ends_with: String
+
+  """All values not ending with the given string."""
+  logo_not_ends_with: String
+  authors_some: AuthorWhereInput
+  items_some: ItemWhereInput
+}
+
+input WebsiteWhereUniqueInput {
+  id: ID
+  name: String
+  url: String
 }

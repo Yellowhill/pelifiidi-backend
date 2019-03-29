@@ -7,18 +7,27 @@ type User {
 	bookmarks: [Item!]! @relation(link: INLINE)
 }
 
+type Website {
+	id: ID! @id
+	name: String! @unique
+	url: String! @unique
+	logo: String
+	authors: [Author] @relation(link: INLINE, onDelete: CASCADE)
+	items: [Item] @relation(link: INLINE, onDelete: CASCADE)
+}
+
 type Item {
 	id: ID! @id
+	website: Website!
 	title: String!
 	description: String
-	url: String!
+	url: String! @unique
 	smallImg: String
 	largeImg: String
-	author: Author
+	author: Author!
 	embeddedYoutubeLinks: [String!]!
 	publishDate: DateTime!
 	textContent: [TextContent!]!
-	# textContent: Json!
 }
 
 type TextContent @embedded {
@@ -33,6 +42,7 @@ type InlineLink @embedded {
 
 type Author {
 	id: ID! @id
-	name: String!
-	items: [Item!]! @relation(link: INLINE)
+	name: String! @unique
+	website: Website!
+	items: [Item] @relation(link: INLINE)
 }
