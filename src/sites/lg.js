@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const cheerio = require('cheerio');
-
+const lgDummy = require('./lgDummy');
 const {
 	compose,
 	composeAsync,
@@ -14,7 +14,7 @@ const {
 	extractUrlAttribute,
 	relativeUrl,
 	sanitizeNumber,
-} = require('../utils/helpers');
+} = require('../utils/scrapeHelpers');
 
 const LG_BASE = 'https://www.livegamers.fi';
 const lgRelativeUrl = relativeUrl(LG_BASE);
@@ -41,16 +41,23 @@ async function getLgNews() {
 	const $ = await fetchHtmlFromUrl(lgRelativeUrl('uutiset')).catch((err) =>
 		console.warn('fetchHtmlFromUrl error: ', err)
 	);
-	const news = $('.article-lift');
-	const newsItems = Array.from(news).map(async (elem, i) => {
-		if (i === 2) return await createItemObject(elem);
+	console.log('aaaaaaaaaaa: ', $.html());
+	return;
+	const $ = cheerio.load(lgDummy);
+	const itemsNodeList = $('.article-lift');
+	const itemsPromise = Array.from(itemsNodeList).map(async (elem, i) => {
+		//if (i === 2) return createItemObject(elem);
+		return createItemObject(elem);
 	});
 
-	// console.log(
-	// 	Promise.all(newsItems).then((data) => {
-	// 		console.log('promise.all data: ', data);
-	// 	})
-	// );
+	return await Promise.all(itemsPromise)
+		.then((data) => {
+			//console.log('lg-data: ', data);
+			return data;
+		})
+		.catch((error) => {
+			console.log('Error in parsing lg-items: ', error);
+		});
 }
 
 async function createItemObject(elem) {
@@ -103,7 +110,7 @@ function parseContent($) {
 	const textContentList = Array.from($('.article-content p'));
 	const youtubeContentList = Array.from($('.framecontainer'));
 	const textContent = textContentList.reduce((contentArray, elem, i) => {
-		const $ = cheerio.load(diu);
+		const $ = cheerio.load(elem);
 
 		const inlineLinks = $('a').length > 0 ? getInlineLinkMappings($) : [];
 

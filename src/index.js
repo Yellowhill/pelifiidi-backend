@@ -9,8 +9,6 @@ server.use(logger('dev'));
 //Todo use express middleware to handle cookies
 //poluplate current user on each request
 
-getLgNews();
-
 server.start(
 	{
 		cors: {
@@ -19,7 +17,7 @@ server.start(
 		},
 	},
 	(deets) => {
-		initializeData(deets);
+		initializeData();
 		console.log(`server is now running on port http://localhost:${deets.port}`);
 	}
 );
