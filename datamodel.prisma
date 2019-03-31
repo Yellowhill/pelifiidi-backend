@@ -12,8 +12,8 @@ type Website {
 	name: String! @unique
 	url: String! @unique
 	logo: String
-	authors: [Author] @relation(link: INLINE, onDelete: CASCADE)
-	items: [Item] @relation(link: INLINE, onDelete: CASCADE)
+	authors: [Author] @relation(link: INLINE)
+	items: [Item] @relation(link: INLINE)
 }
 
 type Item {

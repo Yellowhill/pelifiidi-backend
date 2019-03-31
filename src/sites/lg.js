@@ -38,11 +38,11 @@ resolves it to the Scotch base url and returns the url with https
 // 	);
 
 async function getLgNews() {
-	const $ = await fetchHtmlFromUrl(lgRelativeUrl('uutiset')).catch((err) =>
-		console.warn('fetchHtmlFromUrl error: ', err)
-	);
-	console.log('aaaaaaaaaaa: ', $.html());
-	return;
+	// const $ = await fetchHtmlFromUrl(lgRelativeUrl('uutiset')).catch((err) =>
+	// 	console.warn('fetchHtmlFromUrl error: ', err)
+	// );
+	// console.log('aaaaaaaaaaa: ', $.html());
+
 	const $ = cheerio.load(lgDummy);
 	const itemsNodeList = $('.article-lift');
 	const itemsPromise = Array.from(itemsNodeList).map(async (elem, i) => {

@@ -5,6 +5,7 @@ const db = require('./db');
 const getLgNews = require('./sites/lg');
 const initializeData = require('./utils/initializeData');
 const server = createServer();
+
 server.use(logger('dev'));
 //Todo use express middleware to handle cookies
 //poluplate current user on each request
