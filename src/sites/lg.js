@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const cheerio = require('cheerio');
 const lgDummy = require('./lgDummy');
+const { format } = require('date-fns');
 const {
 	compose,
 	composeAsync,
@@ -26,27 +27,14 @@ const getElementStyle = fetchElemAttribute('style');
 // HELPER FUNCTIONS
 ///////////////////////////////////////////////////////////////////////////////
 
-/**
-A composed function that extracts a url from element attribute,
-resolves it to the Scotch base url and returns the url with https
- **/
-// const extractScotchUrlAttribute = (attr) =>
-// 	compose(
-// 		enforceHttpsUrl,
-// 		scotchRelativeUrl,
-// 		fetchElemAttribute(attr)
-// 	);
-
 async function getLgNews() {
-	// const $ = await fetchHtmlFromUrl(lgRelativeUrl('uutiset')).catch((err) =>
-	// 	console.warn('fetchHtmlFromUrl error: ', err)
-	// );
-	// console.log('aaaaaaaaaaa: ', $.html());
+	const $ = await fetchHtmlFromUrl(lgRelativeUrl('uutiset')).catch((err) =>
+		console.warn('fetchHtmlFromUrl error: ', err)
+	);
 
-	const $ = cheerio.load(lgDummy);
+	//const $ = cheerio.load(lgDummy);
 	const itemsNodeList = $('.article-lift');
 	const itemsPromise = Array.from(itemsNodeList).map(async (elem, i) => {
-		//if (i === 2) return createItemObject(elem);
 		return createItemObject(elem);
 	});
 
@@ -126,7 +114,7 @@ function parseContent($) {
 	});
 
 	return {
-		textContent: JSON.stringify(textContent),
+		textContent,
 		embeddedYoutubeLinks,
 	};
 }
@@ -139,8 +127,5 @@ function getInlineLinkMappings(pTag) {
 		return { text: linkText, url: linkUrl };
 	});
 }
-
-const diu =
-	'<p> Se selviää <a href="https://www.livegamers.fi/arvostelut/resident-evil-2/">arvostelustamme</a> tai <a href="https://www.livegamers.fi/arvostelut/resident-evil-2-2">paskastamme</a>!</p>';
 
 module.exports = getLgNews;
