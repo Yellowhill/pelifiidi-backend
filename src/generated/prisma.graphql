@@ -1,5 +1,5 @@
 # source: http://localhost:4466/pelifiidi/dev
-# timestamp: Fri Mar 29 2019 11:27:43 GMT+0200 (Eastern European Standard Time)
+# timestamp: Sun Apr 07 2019 14:36:36 GMT+0300 (GMT+03:00)
 
 type AggregateAuthor {
   count: Int!
@@ -1670,6 +1670,7 @@ type User implements Node {
   email: String!
   password: String!
   resetToken: String
+  resetTokenExpiry: Float
   bookmarks(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Item!]
 }
 
@@ -1688,6 +1689,7 @@ input UserCreateInput {
   email: String!
   password: String!
   resetToken: String
+  resetTokenExpiry: Float
   bookmarks: ItemCreateManyInput
 }
 
@@ -1711,6 +1713,8 @@ enum UserOrderByInput {
   password_DESC
   resetToken_ASC
   resetToken_DESC
+  resetTokenExpiry_ASC
+  resetTokenExpiry_DESC
 }
 
 type UserPreviousValues {
@@ -1719,6 +1723,7 @@ type UserPreviousValues {
   email: String!
   password: String!
   resetToken: String
+  resetTokenExpiry: Float
 }
 
 type UserSubscriptionPayload {
@@ -1759,6 +1764,7 @@ input UserUpdateInput {
   email: String
   password: String
   resetToken: String
+  resetTokenExpiry: Float
   bookmarks: ItemUpdateManyInput
 }
 
@@ -1767,6 +1773,7 @@ input UserUpdateManyMutationInput {
   email: String
   password: String
   resetToken: String
+  resetTokenExpiry: Float
 }
 
 input UserWhereInput {
@@ -1972,6 +1979,28 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   resetToken_not_ends_with: String
+  resetTokenExpiry: Float
+
+  """All values that are not equal to given value."""
+  resetTokenExpiry_not: Float
+
+  """All values that are contained in given list."""
+  resetTokenExpiry_in: [Float!]
+
+  """All values that are not contained in given list."""
+  resetTokenExpiry_not_in: [Float!]
+
+  """All values less than the given value."""
+  resetTokenExpiry_lt: Float
+
+  """All values less than or equal the given value."""
+  resetTokenExpiry_lte: Float
+
+  """All values greater than the given value."""
+  resetTokenExpiry_gt: Float
+
+  """All values greater than or equal the given value."""
+  resetTokenExpiry_gte: Float
   bookmarks_some: ItemWhereInput
 }
 

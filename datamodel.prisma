@@ -4,6 +4,7 @@ type User {
 	email: String! @unique
 	password: String!
 	resetToken: String
+	resetTokenExpiry: Float
 	bookmarks: [Item!]! @relation(link: INLINE)
 }
 
