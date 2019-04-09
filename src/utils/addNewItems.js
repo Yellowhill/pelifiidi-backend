@@ -10,13 +10,16 @@ async function addNewItems(scrapeFunc, website) {
 	const newItems = items.filter((item) =>
 		isAfter(item.publishDate, latestItemPublishDate)
 	);
-
+	console.log('newitems: ', newItems);
 	if (newItems.length > 0) {
 		const newItemsPromises = newItems.map((item) => {
-			const { textContent, embeddedYoutubeLinks, ...restProps } = item;
+			const { textContent, embeddedYoutubeLinks, embeddedTweets, ...restProps } = item;
 			const textContentData = createTextContentObject(textContent);
 			const newItemData = {
 				...restProps,
+				embeddedTweets: {
+					set: embeddedTweets,
+				},
 				embeddedYoutubeLinks: { set: embeddedYoutubeLinks },
 				author: {
 					connect: {

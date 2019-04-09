@@ -85,8 +85,15 @@ async function getAuthorContentDateImg(newsUrl) {
 	const author = formatLGAuthor(fetchElemInnerText($('.hero-area > h4').first()));
 	const styleString = getElementStyle($('.hero-area'));
 	const largeImg = styleString ? styleString.split("'")[1] : '';
-	const { textContent, embeddedYoutubeLinks } = parseContent($);
-	return { author, embeddedYoutubeLinks, textContent, publishDate, largeImg };
+	const { textContent, embeddedYoutubeLinks, embeddedTweets } = parseContent($);
+	return {
+		author,
+		embeddedYoutubeLinks,
+		embeddedTweets,
+		textContent,
+		publishDate,
+		largeImg,
+	};
 }
 
 function formatLGAuthor(author) {
@@ -95,10 +102,15 @@ function formatLGAuthor(author) {
 }
 
 function parseContent($) {
-	const textContentList = Array.from($('.article-content p'));
+	const textContentList = Array.from($('.article-content > p'));
 	const youtubeContentList = Array.from($('.framecontainer'));
+	const tweetContentList = Array.from($('.article-content').find('.entry-content-asset'));
+
 	const textContent = textContentList.reduce((contentArray, elem, i) => {
 		const $ = cheerio.load(elem);
+		if ($.text().trim().length === 0) {
+			return contentArray;
+		}
 
 		const inlineLinks = $('a').length > 0 ? getInlineLinkMappings($) : [];
 
@@ -113,9 +125,15 @@ function parseContent($) {
 		return getElementSrc($('iframe'));
 	});
 
+	const tweets = tweetContentList.map((tweet) => {
+		const twt = cheerio.load(tweet);
+		return getElementHref(twt('.twitter-tweet a:last-child'));
+	});
+
 	return {
 		textContent,
 		embeddedYoutubeLinks,
+		embeddedTweets: tweets.filter((twt) => twt !== null),
 	};
 }
 

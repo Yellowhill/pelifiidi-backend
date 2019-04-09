@@ -27,6 +27,7 @@ type Item {
 	largeImg: String
 	author: Author!
 	embeddedYoutubeLinks: [String!]!
+	embeddedTweets: [String]!
 	publishDate: DateTime!
 	textContent: [TextContent!]!
 }

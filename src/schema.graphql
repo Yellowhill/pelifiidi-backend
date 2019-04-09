@@ -2,6 +2,9 @@
 # import * from './generated/prisma.graphql'
 
 # /** The types below will be visible for the client-side **/
+type Subscription {
+	item(where: ItemSubscriptionWhereInput): ItemSubscriptionPayload
+}
 
 type Mutation {
 	hi: String!
@@ -9,4 +12,23 @@ type Mutation {
 
 type Query {
 	hi: String!
+	items(
+		where: ItemWhereInput
+		orderBy: ItemOrderByInput
+		skip: Int
+		after: String
+		before: String
+		first: Int
+		last: Int
+	): [Item]!
+	item(where: ItemWhereUniqueInput!): Item
+	itemsConnection(
+		where: ItemWhereInput
+		orderBy: ItemOrderByInput
+		skip: Int
+		after: String
+		before: String
+		first: Int
+		last: Int
+	): ItemConnection!
 }

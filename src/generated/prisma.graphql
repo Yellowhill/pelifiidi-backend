@@ -1,5 +1,5 @@
 # source: http://localhost:4466/pelifiidi/dev
-# timestamp: Sun Apr 07 2019 14:36:36 GMT+0300 (GMT+03:00)
+# timestamp: Tue Apr 09 2019 09:01:15 GMT+0300 (Eastern European Summer Time)
 
 type AggregateAuthor {
   count: Int!
@@ -562,6 +562,7 @@ type Item implements Node {
   largeImg: String
   author: Author!
   embeddedYoutubeLinks: [String!]!
+  embeddedTweets: [String!]!
   publishDate: DateTime!
   textContent: [TextContent!]
 }
@@ -576,6 +577,10 @@ type ItemConnection {
   aggregate: AggregateItem!
 }
 
+input ItemCreateembeddedTweetsInput {
+  set: [String!]
+}
+
 input ItemCreateembeddedYoutubeLinksInput {
   set: [String!]
 }
@@ -588,6 +593,7 @@ input ItemCreateInput {
   largeImg: String
   publishDate: DateTime!
   embeddedYoutubeLinks: ItemCreateembeddedYoutubeLinksInput
+  embeddedTweets: ItemCreateembeddedTweetsInput
   website: WebsiteCreateOneWithoutItemsInput!
   author: AuthorCreateOneWithoutItemsInput!
   textContent: TextContentCreateManyInput
@@ -616,6 +622,7 @@ input ItemCreateWithoutAuthorInput {
   largeImg: String
   publishDate: DateTime!
   embeddedYoutubeLinks: ItemCreateembeddedYoutubeLinksInput
+  embeddedTweets: ItemCreateembeddedTweetsInput
   website: WebsiteCreateOneWithoutItemsInput!
   textContent: TextContentCreateManyInput
 }
@@ -628,6 +635,7 @@ input ItemCreateWithoutWebsiteInput {
   largeImg: String
   publishDate: DateTime!
   embeddedYoutubeLinks: ItemCreateembeddedYoutubeLinksInput
+  embeddedTweets: ItemCreateembeddedTweetsInput
   author: AuthorCreateOneWithoutItemsInput!
   textContent: TextContentCreateManyInput
 }
@@ -666,6 +674,7 @@ type ItemPreviousValues {
   smallImg: String
   largeImg: String
   embeddedYoutubeLinks: [String!]!
+  embeddedTweets: [String!]!
   publishDate: DateTime!
 }
 
@@ -983,9 +992,14 @@ input ItemUpdateDataInput {
   largeImg: String
   publishDate: DateTime
   embeddedYoutubeLinks: ItemUpdateembeddedYoutubeLinksInput
+  embeddedTweets: ItemUpdateembeddedTweetsInput
   website: WebsiteUpdateOneRequiredWithoutItemsInput
   author: AuthorUpdateOneRequiredWithoutItemsInput
   textContent: TextContentUpdateManyInput
+}
+
+input ItemUpdateembeddedTweetsInput {
+  set: [String!]
 }
 
 input ItemUpdateembeddedYoutubeLinksInput {
@@ -1000,6 +1014,7 @@ input ItemUpdateInput {
   largeImg: String
   publishDate: DateTime
   embeddedYoutubeLinks: ItemUpdateembeddedYoutubeLinksInput
+  embeddedTweets: ItemUpdateembeddedTweetsInput
   website: WebsiteUpdateOneRequiredWithoutItemsInput
   author: AuthorUpdateOneRequiredWithoutItemsInput
   textContent: TextContentUpdateManyInput
@@ -1013,6 +1028,7 @@ input ItemUpdateManyDataInput {
   largeImg: String
   publishDate: DateTime
   embeddedYoutubeLinks: ItemUpdateembeddedYoutubeLinksInput
+  embeddedTweets: ItemUpdateembeddedTweetsInput
 }
 
 input ItemUpdateManyInput {
@@ -1035,6 +1051,7 @@ input ItemUpdateManyMutationInput {
   largeImg: String
   publishDate: DateTime
   embeddedYoutubeLinks: ItemUpdateembeddedYoutubeLinksInput
+  embeddedTweets: ItemUpdateembeddedTweetsInput
 }
 
 input ItemUpdateManyWithoutAuthorInput {
@@ -1074,6 +1091,7 @@ input ItemUpdateWithoutAuthorDataInput {
   largeImg: String
   publishDate: DateTime
   embeddedYoutubeLinks: ItemUpdateembeddedYoutubeLinksInput
+  embeddedTweets: ItemUpdateembeddedTweetsInput
   website: WebsiteUpdateOneRequiredWithoutItemsInput
   textContent: TextContentUpdateManyInput
 }
@@ -1086,6 +1104,7 @@ input ItemUpdateWithoutWebsiteDataInput {
   largeImg: String
   publishDate: DateTime
   embeddedYoutubeLinks: ItemUpdateembeddedYoutubeLinksInput
+  embeddedTweets: ItemUpdateembeddedTweetsInput
   author: AuthorUpdateOneRequiredWithoutItemsInput
   textContent: TextContentUpdateManyInput
 }
