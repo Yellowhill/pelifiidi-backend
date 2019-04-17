@@ -2,16 +2,22 @@
 # import * from './generated/prisma.graphql'
 
 # /** The types below will be visible for the client-side **/
+
+type successMessage {
+	message: String!
+}
+
 type Subscription {
 	item(where: ItemSubscriptionWhereInput): ItemSubscriptionPayload
 }
 
 type Mutation {
-	hi: String!
+	signup(email: String!, password: String!, name: String!): User!
+	signin(email: String!, password: String!): User!
+	signout: successMessage!
 }
 
 type Query {
-	hi: String!
 	items(
 		where: ItemWhereInput
 		orderBy: ItemOrderByInput

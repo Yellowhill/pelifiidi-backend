@@ -28,11 +28,11 @@ async function initializeLivegamers() {
 }
 
 function startPollingItems(scrapeFunc, websiteInfo) {
-	addNewItems(scrapeFunc, websiteInfo);
-	// setInterval(() => {
-	// 	console.log('time: ', new Date());
-	// 	addNewItems(scrapeFunc, websiteInfo);
-	// }, 60000);
+	//addNewItems(scrapeFunc, websiteInfo);
+	setInterval(() => {
+		console.log('time: ', new Date());
+		addNewItems(scrapeFunc, websiteInfo);
+	}, 300000); //5min
 }
 
 async function addNewSiteAndStartPolling(scrapeFunc, websiteInfo) {
