@@ -15,6 +15,12 @@ type Mutation {
 	signup(email: String!, password: String!, name: String!): User!
 	signin(email: String!, password: String!): User!
 	signout: successMessage!
+	requestReset(email: String!): successMessage!
+	resetPassword(
+		password: String!
+		confirmPassword: String!
+		resetToken: String!
+	): successMessage!
 }
 
 type Query {
