@@ -16,11 +16,8 @@ type Mutation {
 	signin(email: String!, password: String!): User!
 	signout: successMessage!
 	requestReset(email: String!): successMessage!
-	resetPassword(
-		password: String!
-		confirmPassword: String!
-		resetToken: String!
-	): successMessage!
+	resetPassword(password: String!, confirmPassword: String!, resetToken: String!): User!
+	addBookmark(id: String!): User!
 }
 
 type Query {
@@ -34,6 +31,7 @@ type Query {
 		last: Int
 	): [Item]!
 	item(where: ItemWhereUniqueInput!): Item
+	me: User
 	itemsConnection(
 		where: ItemWhereInput
 		orderBy: ItemOrderByInput

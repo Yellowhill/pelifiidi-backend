@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { randomBytes } = require('crypto');
 const { promisify } = require('util');
-
+const { transport, makeANiceEmail } = require('../mail');
 const Mutation = {
 	async signup(parent, args, ctx, info) {
 		args.email = args.email.toLowerCase();
@@ -22,7 +22,7 @@ const Mutation = {
 		const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
 		//Set the jwt as a cookie on the response
 		ctx.response.cookie('token', token, {
-			httpOnly: true,
+			//httpOnly: true,
 			maxAge: 1000 * 60 * 60 * 24 * 365, //1 year cookie
 		});
 
@@ -48,13 +48,12 @@ const Mutation = {
 
 		//generate jwt token
 		const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
-
+		console.log('token in signin - Mutation ', token);
 		//set the cookie with the token
 		ctx.response.cookie('token', token, {
-			httpOnly: true,
+			//httpOnly: true,
 			maxAge: 1000 * 60 * 60 * 24 * 365,
 		});
-
 		return user;
 	},
 
@@ -62,6 +61,7 @@ const Mutation = {
 		ctx.response.clearCookie('token');
 		return { message: 'Goodbye' };
 	},
+
 	async requestReset(parent, args, ctx, info) {
 		// 1. Check if this is a real user
 		const user = await ctx.db.query.user({ where: { email: args.email } });
@@ -78,7 +78,7 @@ const Mutation = {
 		});
 		// 3. Email them that reset token
 		const mailRes = await transport.sendMail({
-			from: 'wes@wesbos.com',
+			from: 'je@kel.com',
 			to: user.email,
 			subject: 'Your Password Reset Token',
 			html: makeANiceEmail(`Your Password Reset Token is here!
@@ -91,7 +91,7 @@ const Mutation = {
 		// 4. Return the message
 		return { message: 'Thanks!' };
 	},
-	
+
 	async resetPassword(parent, args, ctx, info) {
 		// 1. check if the passwords match
 		if (args.password !== args.confirmPassword) {
@@ -123,11 +123,34 @@ const Mutation = {
 		const token = jwt.sign({ userId: updatedUser.id }, process.env.APP_SECRET);
 		// 7. Set the JWT cookie
 		ctx.response.cookie('token', token, {
-			httpOnly: true,
+			//httpOnly: true,
 			maxAge: 1000 * 60 * 60 * 24 * 365,
 		});
 		// 8. return the new user
 		return updatedUser;
+	},
+
+	async addBookmark(parent, args, ctx, info) {
+		const { user } = ctx.request;
+		// 1. Check if this is a real user
+		const userFromDb = await ctx.db.query.user({ where: { id: user.id } });
+		if (!userFromDb) {
+			throw new Error(`No such user found`);
+		}
+
+		const updatedUserFromDb = ctx.db.mutation.updateUser(
+			{
+				where: { id: user.id },
+				data: { bookmarks: { connect: { id: args.id } } },
+			},
+			info
+		);
+
+		if (!updatedUserFromDb) {
+			throw new Error('Bookmark operation failed!');
+		}
+
+		return updatedUserFromDb;
 	},
 };
 
