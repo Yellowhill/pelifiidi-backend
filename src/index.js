@@ -15,6 +15,7 @@ server.express.use(cookieParser());
 
 // decode the JWT so we can get the user Id on each request
 server.express.use((req, res, next) => {
+	console.log('COOKIES: ', req.cookies);
 	const { token } = req.cookies;
 	console.log('TOKEN: ', token);
 	if (token) {
@@ -26,19 +27,19 @@ server.express.use((req, res, next) => {
 });
 
 //poluplate current user on each request
-server.express.use(async (req, res, next) => {
-	// if they aren't logged in, skip this
-	if (!req.userId) return next();
-	const user = await db.query.user({ where: { id: req.userId } }, '{ id, email, name }');
-	req.user = user;
-	next();
-});
+// server.express.use(async (req, res, next) => {
+// 	// if they aren't logged in, skip this
+// 	if (!req.userId) return next();
+// 	const user = await db.query.user({ where: { id: req.userId } }, '{ id, email, name }');
+// 	req.user = user;
+// 	next();
+// });
 
-server.express.use((req, res, next) => {
-	console.log('req.user', req.user);
-	console.log('req.headers', req.headers);
-	next();
-});
+// server.express.use((req, res, next) => {
+// 	console.log('req.user', req.user);
+// 	console.log('req.headers', req.headers);
+// 	next();
+// });
 
 server.start(
 	{

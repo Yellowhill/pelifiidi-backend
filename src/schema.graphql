@@ -18,6 +18,7 @@ type Mutation {
 	requestReset(email: String!): successMessage!
 	resetPassword(password: String!, confirmPassword: String!, resetToken: String!): User!
 	addBookmark(id: String!): User!
+	removeBookmark(id: String!): User!
 }
 
 type Query {

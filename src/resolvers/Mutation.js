@@ -22,7 +22,7 @@ const Mutation = {
 		const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
 		//Set the jwt as a cookie on the response
 		ctx.response.cookie('token', token, {
-			//httpOnly: true,
+			httpOnly: true,
 			maxAge: 1000 * 60 * 60 * 24 * 365, //1 year cookie
 		});
 
@@ -49,9 +49,10 @@ const Mutation = {
 		//generate jwt token
 		const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
 		console.log('token in signin - Mutation ', token);
+		console.log('signin - Mutation app_secret ', process.env.APP_SECRET);
 		//set the cookie with the token
 		ctx.response.cookie('token', token, {
-			//httpOnly: true,
+			httpOnly: true,
 			maxAge: 1000 * 60 * 60 * 24 * 365,
 		});
 		return user;
@@ -123,7 +124,7 @@ const Mutation = {
 		const token = jwt.sign({ userId: updatedUser.id }, process.env.APP_SECRET);
 		// 7. Set the JWT cookie
 		ctx.response.cookie('token', token, {
-			//httpOnly: true,
+			httpOnly: true,
 			maxAge: 1000 * 60 * 60 * 24 * 365,
 		});
 		// 8. return the new user
@@ -131,23 +132,44 @@ const Mutation = {
 	},
 
 	async addBookmark(parent, args, ctx, info) {
-		const { user } = ctx.request;
 		// 1. Check if this is a real user
-		const userFromDb = await ctx.db.query.user({ where: { id: user.id } });
+		const userFromDb = await ctx.db.query.user({ where: { id: ctx.request.userId } });
 		if (!userFromDb) {
 			throw new Error(`No such user found`);
 		}
 
 		const updatedUserFromDb = ctx.db.mutation.updateUser(
 			{
-				where: { id: user.id },
+				where: { id: userFromDb.id },
 				data: { bookmarks: { connect: { id: args.id } } },
 			},
 			info
 		);
 
 		if (!updatedUserFromDb) {
-			throw new Error('Bookmark operation failed!');
+			throw new Error('Add bookmark operation failed!');
+		}
+
+		return updatedUserFromDb;
+	},
+
+	async removeBookmark(parent, args, ctx, info) {
+		// 1. Check if this is a real user
+		const userFromDb = await ctx.db.query.user({ where: { id: ctx.request.userId } });
+		if (!userFromDb) {
+			throw new Error(`No such user found`);
+		}
+
+		const updatedUserFromDb = ctx.db.mutation.updateUser(
+			{
+				where: { id: userFromDb.id },
+				data: { bookmarks: { disconnect: { id: args.id } } },
+			},
+			info
+		);
+
+		if (!updatedUserFromDb) {
+			throw new Error('remove bookmark operation failed!');
 		}
 
 		return updatedUserFromDb;
