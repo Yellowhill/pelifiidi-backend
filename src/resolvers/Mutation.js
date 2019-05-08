@@ -31,11 +31,15 @@ const Mutation = {
 
 	async signin(parent, args, ctx, info) {
 		//check if the user exists
-		const user = await ctx.db.query.user({
-			where: {
-				email: args.email,
+		const user = await ctx.db.query.user(
+			{
+				where: {
+					email: args.email,
+				},
 			},
-		});
+			info
+		);
+
 		if (!user) {
 			throw new Error(`No such user found for email ${args.email}`);
 		}
@@ -48,13 +52,12 @@ const Mutation = {
 
 		//generate jwt token
 		const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
-		console.log('token in signin - Mutation ', token);
-		console.log('signin - Mutation app_secret ', process.env.APP_SECRET);
 		//set the cookie with the token
 		ctx.response.cookie('token', token, {
 			httpOnly: true,
 			maxAge: 1000 * 60 * 60 * 24 * 365,
 		});
+
 		return user;
 	},
 
