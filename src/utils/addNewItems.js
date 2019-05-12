@@ -1,5 +1,6 @@
 const { isAfter } = require('date-fns');
 const { to } = require('./asyncHelpers');
+const { getSlugFromUrl } = require('./core');
 const db = require('../db');
 
 async function addNewItems(scrapeFunc, website) {
@@ -14,9 +15,11 @@ async function addNewItems(scrapeFunc, website) {
 	if (newItems.length > 0) {
 		const newItemsPromises = newItems.map((item) => {
 			const { textContent, embeddedYoutubeLinks, embeddedTweets, ...restProps } = item;
+			const slug = getSlugFromUrl(restProps.url);
 			const textContentData = createTextContentObject(textContent);
 			const newItemData = {
 				...restProps,
+				slug,
 				embeddedTweets: {
 					set: embeddedTweets,
 				},

@@ -23,6 +23,7 @@ type Item {
 	title: String!
 	description: String
 	url: String! @unique
+	slug: String! @unique
 	smallImg: String
 	largeImg: String
 	author: Author!
