@@ -183,7 +183,8 @@ mutation {
     		connect: {
       		id: "5ca89c89a7b11b00076b4ec0"
     		}
-  		}
+			}
+			slug: "testi-slug"
   		textContent: {
     		create: [{
     			text: "diu diu",

@@ -28,9 +28,10 @@ const getElementStyle = fetchElemAttribute('style');
 ///////////////////////////////////////////////////////////////////////////////
 
 async function getLgNews() {
-	const $ = await fetchHtmlFromUrl(lgRelativeUrl('uutiset')).catch((err) =>
-		console.warn('fetchHtmlFromUrl error: ', err)
-	);
+	const $ = await fetchHtmlFromUrl(lgRelativeUrl('uutiset')).catch((err) => {
+		console.warn('fetchHtmlFromUrl error: ', err);
+		return;
+	});
 
 	//const $ = cheerio.load(lgDummy);
 	const itemsNodeList = $('.article-lift');
