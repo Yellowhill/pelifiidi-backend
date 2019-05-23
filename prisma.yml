@@ -1,7 +1,8 @@
-endpoint: ${env:PRISMA_ENDPOINT}
+# endpoint: ${env:PRISMA_ENDPOINT}
+endpoint: http://prisma-service:4466/pelifiidi/dev
 datamodel: datamodel.prisma
 databaseType: document
-#secret: ${env.PRISMA_SECRET}
+# secret: ${env.PRISMA_SECRET}
 hooks:
   post-deploy:
     - graphql get-schema -p prisma

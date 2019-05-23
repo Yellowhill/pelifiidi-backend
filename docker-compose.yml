@@ -1,25 +1,51 @@
 version: '3'
 services:
-  prisma:
-    image: prismagraphql/prisma:1.29
+  graphqlyoga-service:
+    container_name: pelifiidi-graphqlyoga
     restart: always
+    build: .
+    volumes:
+      - ./src:/usr/src/app/src
+    command: npm run dev
     ports:
-      - '4466:4466'
+      - 4444:4444
+      - 3000:3000
+    expose:
+      - 3000
+    links:
+      - prisma-service:prisma-service
+    depends_on:
+      - prisma-service
+
+  prisma-service:
+    container_name: pelifiidi-prisma
+    image: prismagraphql/prisma:1.33
+    restart: always
+    expose:
+      - 4466
+    ports:
+      - 4466:4466
+    links:
+      - mongo-service:mongo-service
+    depends_on:
+      - mongo-service
     environment:
       PRISMA_CONFIG: |
         port: 4466
         databases:
           default:
             connector: mongo
+            port: 27017
             uri: mongodb://prisma:prisma@mongo
-  mongo:
+  mongo-service:
+    container_name: pelifiidi-mongo
     image: mongo:3.6
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: prisma
       MONGO_INITDB_ROOT_PASSWORD: prisma
     ports:
-      - '27017:27017'
+      - 27017:27017
     volumes:
       - mongo:/var/lib/mongo
 volumes:
