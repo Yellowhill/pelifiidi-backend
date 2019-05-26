@@ -36,7 +36,6 @@ server.start(
 	},
 	(props) => {
 		initializeData();
-		console.log('AAAAAAAAAPUVAä kää k', props);
-		console.log(`server is now running on port ${process.env.HOST}:${props.port}`);
+		console.log(`server is now running on port ${props.port}`);
 	}
 );

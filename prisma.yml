@@ -1,5 +1,5 @@
 # endpoint: ${env:PRISMA_ENDPOINT}
-endpoint: http://prisma-service:4466/pelifiidi/dev
+endpoint: http://prisma:4466
 datamodel: datamodel.prisma
 databaseType: document
 # secret: ${env.PRISMA_SECRET}

@@ -11,7 +11,8 @@ RUN npm install
 
 # Bundle app source
 COPY . /usr/src/app
+# COPY . .
 
 # EXPOSE 4444
 
-CMD ["npm", "run", "dev"]
+# CMD ["npm", "run", "dev"]
