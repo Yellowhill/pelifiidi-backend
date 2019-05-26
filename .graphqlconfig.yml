@@ -3,7 +3,8 @@ projects:
     schemaPath: './src/schema.graphql'
     extensions:
       endpoints:
-        default: 'http://graphqlyoga-service:4444'
+        default: 'http://localhost:4444'
+        # default: 'http://graphqlyoga-service:4444'
   prisma:
     schemaPath: './src/generated/prisma.graphql'
     extensions:

@@ -1,32 +1,22 @@
 version: '3'
 services:
-  graphqlyoga-service:
-    container_name: pelifiidi-graphqlyoga
-    restart: always
-    build: .
-    #   context: .
-    #   args:
-    #     NODE_ENV: development
-    #     PRISMA_ENDPOINT: http://prisma-service:4466/pelifiidi/dev
-    # volumes:
-    #   - ./src:/usr/src/app/src
-    command: npm run dev
-    # environment:
-    #   NODE_ENV: development
-    ports:
-      - '4444:4444'
-      - '3000:3000'
-    links:
-      - prisma
-    # expose:
-    #   - 3000
-    #   - 4444
-    depends_on:
-      - prisma
-      - mongo
-
+  # graphqlyoga-service:
+  #   container_name: pelifiidi-graphqlyoga
+  #   restart: always
+  #   build: .
+  #   command: npm run dev
+  #   environment:
+  #     NODE_ENV: development
+  #     PRISMA_ENDPOINT: http://prisma:4466/pelifiidi/dev
+  #   ports:
+  #     - '4444:4444'
+  #     - '3000:3000'
+  #   links:
+  #     - prisma
+  #   depends_on:
+  #     - prisma
+  #     - mongo
   prisma:
-    # container_name: pelifiidi-prisma
     image: prismagraphql/prisma:1.33
     restart: always
     ports:
@@ -39,13 +29,9 @@ services:
         databases:
           default:
             connector: mongo
-            # port: 27017
-            # host: host.docker.internal
             uri: mongodb://prisma:prisma@mongo
-            database: myPrismaMongoDB 
-            # prisma:prisma@mongo
+
   mongo:
-    # container_name: pelifiidi-mongo
     image: mongo:3.6
     restart: always
     environment:

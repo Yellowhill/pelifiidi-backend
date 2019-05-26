@@ -3,8 +3,8 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const jwt = require('jsonwebtoken');
 const createServer = require('./utils/createServer');
-const db = require('./db');
-const getLgNews = require('./sites/lg');
+// const db = require('./db');
+// const getLgNews = require('./sites/lg');
 const initializeData = require('./utils/initializeData');
 
 const server = createServer();

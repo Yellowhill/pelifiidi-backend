@@ -1,5 +1,5 @@
 # source: http://localhost:4466/pelifiidi/dev
-# timestamp: Thu May 09 2019 15:39:27 GMT+0300 (Eastern European Summer Time)
+# timestamp: Sun May 26 2019 13:17:14 GMT+0300 (GMT+03:00)
 
 type AggregateAuthor {
   count: Int!
@@ -35,6 +35,7 @@ type AuthorConnection {
 }
 
 input AuthorCreateInput {
+  id: ID
   name: String!
   website: WebsiteCreateOneWithoutAuthorsInput!
   items: ItemCreateManyWithoutAuthorInput
@@ -51,11 +52,13 @@ input AuthorCreateOneWithoutItemsInput {
 }
 
 input AuthorCreateWithoutItemsInput {
+  id: ID
   name: String!
   website: WebsiteCreateOneWithoutAuthorsInput!
 }
 
 input AuthorCreateWithoutWebsiteInput {
+  id: ID
   name: String!
   items: ItemCreateManyWithoutAuthorInput
 }
@@ -587,6 +590,7 @@ input ItemCreateembeddedYoutubeLinksInput {
 }
 
 input ItemCreateInput {
+  id: ID
   title: String!
   description: String
   url: String!
@@ -617,6 +621,7 @@ input ItemCreateManyWithoutWebsiteInput {
 }
 
 input ItemCreateWithoutAuthorInput {
+  id: ID
   title: String!
   description: String
   url: String!
@@ -631,6 +636,7 @@ input ItemCreateWithoutAuthorInput {
 }
 
 input ItemCreateWithoutWebsiteInput {
+  id: ID
   title: String!
   description: String
   url: String!
@@ -1798,6 +1804,7 @@ type UserConnection {
 }
 
 input UserCreateInput {
+  id: ID
   name: String!
   email: String!
   password: String!
@@ -2142,6 +2149,7 @@ type WebsiteConnection {
 }
 
 input WebsiteCreateInput {
+  id: ID
   name: String!
   url: String!
   logo: String
@@ -2160,6 +2168,7 @@ input WebsiteCreateOneWithoutItemsInput {
 }
 
 input WebsiteCreateWithoutAuthorsInput {
+  id: ID
   name: String!
   url: String!
   logo: String
@@ -2167,6 +2176,7 @@ input WebsiteCreateWithoutAuthorsInput {
 }
 
 input WebsiteCreateWithoutItemsInput {
+  id: ID
   name: String!
   url: String!
   logo: String
