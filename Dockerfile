@@ -1,18 +1,18 @@
 FROM node:10
-RUN mkdir -p /usr/app
-WORKDIR /usr/app
+# RUN mkdir -p /usr/pelifiidi
+WORKDIR /usr/pelifiidi
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
-COPY package*.json ./
+COPY package*.json /usr/pelifiidi/
 
 RUN npm install
 # If you are building your code for production
 # RUN npm ci --only=production 
 
 # Bundle app source
-COPY . /usr/app
-# COPY . .
+# COPY . /usr/app
+COPY . /usr/pelifiidi/
 
-# EXPOSE 4444
+EXPOSE 4444
 
 # CMD ["npm", "run", "dev"]

@@ -4,11 +4,11 @@ node_modules
 .gitignore
 database
 dist
-docker-compose.override.yml
-docker-compose.yml
-Dockerfile
-graphqlconfig.yml
-prisma.yml
+# docker-compose.override.yml
+# docker-compose.yml
+# Dockerfile
+# graphqlconfig.yml
+# prisma.yml
 README.md
 .vscode
 *.log
