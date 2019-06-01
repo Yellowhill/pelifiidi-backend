@@ -1,47 +1,60 @@
+#TODO create docker-compose for development and production
+# One thing to note — if you are running linux containers on a windows machine, nodemon might not be able to watch your files via file system events.
+# In order to fix this, you could use polling: `nodemon -L index.js`
+
 version: '3'
 services:
   graphqlyoga-service:
-    container_name: pelifiidi-graphqlyoga
+    container_name: pelifiidi-graphqlyoga-container
     restart: always
-    build: .
-    command: npm run dev
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: bash -c "npm run dev"
     environment:
       NODE_ENV: development
-      PRISMA_ENDPOINT: http://prisma:4466/pelifiidi/dev
+      PRISMA_ENDPOINT: ${PRISMA_ENDPOINT}
     ports:
-      - '4444:4444'
-      - '3000:3000'
-    links:
-      - prisma
+      - 4444:4444
+      - 3000:3000
+    expose:
+      - 4444
+      - 3000
+    volumes: # For webpack dev server to use our local files
+      - ./src:/usr/pelifiidi/src
     depends_on:
-      - prisma
-      - mongo
-  prisma:
+      - prisma-service
+      - mongo-service
+  prisma-service:
+    container_name: pelifiidi-prisma-container
     image: prismagraphql/prisma:1.33
     restart: always
     ports:
-      - '4466:4466'
+      - 4466:4466
+    expose:
+      - 4466
     depends_on:
-      - mongo
+      - mongo-service
     environment:
       PRISMA_CONFIG: |
         port: 4466
         databases:
           default:
             connector: mongo
-            uri: mongodb://prisma:prisma@mongo
+            uri: mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongo-service
 
-  mongo:
+  mongo-service:
+    container_name: pelifiidi-mongo-container
     image: mongo:3.6
     restart: always
     environment:
-      MONGO_INITDB_ROOT_USERNAME: prisma
-      MONGO_INITDB_ROOT_PASSWORD: prisma
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
     ports:
-      - '27017:27017'
+      - 27017:27017
     volumes:
-      - mongo:/var/lib/mongo
+      - mongo-volume:/var/lib/mongo
 volumes:
-  mongo:
+  mongo-volume:
     external:
       name: pelifiidi_db

@@ -6,13 +6,10 @@ WORKDIR /usr/pelifiidi
 COPY package*.json /usr/pelifiidi/
 
 RUN npm install
+RUN npm install -g prisma
 # If you are building your code for production
 # RUN npm ci --only=production 
 
 # Bundle app source
-# COPY . /usr/app
 COPY . /usr/pelifiidi/
-
-EXPOSE 4444
-
 # CMD ["npm", "run", "dev"]
