@@ -15,7 +15,6 @@ server.express.use(cookieParser());
 
 // decode the JWT so we can get the user Id on each request
 server.express.use((req, res, next) => {
-	//console.log('COOKIES: ', req.cookies);
 	const { token } = req.cookies;
 	//console.log('TOKEN: ', token);
 	if (token) {
@@ -31,7 +30,7 @@ server.start(
 		cors: {
 			credentials: true,
 			//origin: process.env.FRONTEND_URL,
-			// origin: [process.env.FRONTEND_URL, 'http://localhost:3000', '172.20.0.3'],
+			origin: [process.env.FRONTEND_URL, 'http://localhost:3000'],
 		},
 		port: 4444,
 	},
