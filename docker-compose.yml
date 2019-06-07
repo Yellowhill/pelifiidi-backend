@@ -1,6 +1,18 @@
 #TODO create docker-compose for development and production
+
+########
 # One thing to note — if you are running linux containers on a windows machine, nodemon might not be able to watch your files via file system events.
 # In order to fix this, you could use polling: `nodemon -L index.js`
+#########
+
+#########
+# expose ports without publishing them to the host machine — they’ll only be accessible to linked services on the same network:
+# expose:
+#   - 4444
+#   - 3000
+# links:
+#   - prisma-service
+#########
 
 version: '3'
 services:
@@ -19,25 +31,18 @@ services:
     ports:
       - 4444:4444
       - 3000:3000
-    expose:
-      - 4444
-      - 3000
     volumes: # For webpack dev server to use our local files
       - ./src:/usr/pelifiidi/src
       - /usr/pelifiidi/node_modules
     depends_on:
       - prisma-service
       - mongo-service
-    links:
-      - prisma-service
   prisma-service:
     container_name: pelifiidi-prisma-container
     image: prismagraphql/prisma:1.33
     restart: always
     ports:
       - 4466:4466
-    expose:
-      - 4466
     depends_on:
       - mongo-service
     environment:
