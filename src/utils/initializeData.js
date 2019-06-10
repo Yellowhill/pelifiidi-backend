@@ -32,7 +32,7 @@ function startPollingItems(scrapeFunc, websiteInfo) {
 	setInterval(() => {
 		console.log('time: ', new Date());
 		addNewItems(scrapeFunc, websiteInfo);
-	}, 300000); //5min
+	}, 300000); //5min300000
 }
 
 async function addNewSiteAndStartPolling(scrapeFunc, websiteInfo) {

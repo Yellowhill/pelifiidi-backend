@@ -23,7 +23,7 @@ async function addNewAuthors(website, authors) {
 		return db.mutation.createAuthor({
 			data: {
 				name: author,
-				website: { connect: { id: website.id } },
+				website: { connect: { name: website.name } },
 				items: { create: [] },
 			},
 		});

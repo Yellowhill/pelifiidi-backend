@@ -1,52 +1,64 @@
 const { isAfter } = require('date-fns');
 const { to } = require('./asyncHelpers');
 const { getSlugFromUrl } = require('./core');
+const addNewAuthors = require('./addNewAuthors');
 const db = require('../db');
+const { getUniqueAuthors } = require('./core');
 
 async function addNewItems(scrapeFunc, website) {
 	const items = await scrapeFunc();
 	const latestItemPublishDate = await getLatestItemPublishDate();
-	console.log('latestItemPublishDate: ', latestItemPublishDate);
-
 	const newItems = items.filter((item) =>
 		isAfter(item.publishDate, latestItemPublishDate)
 	);
+	console.log('latestItemPublishDate: ', latestItemPublishDate);
 	console.log('newitems: ', newItems);
-	if (newItems.length > 0) {
-		const newItemsPromises = newItems.map((item) => {
-			const { textContent, embeddedYoutubeLinks, embeddedTweets, ...restProps } = item;
-			const slug = getSlugFromUrl(restProps.url);
-			const textContentData = createTextContentObject(textContent);
-			const newItemData = {
-				...restProps,
-				slug,
-				embeddedTweets: {
-					set: embeddedTweets,
-				},
-				embeddedYoutubeLinks: { set: embeddedYoutubeLinks },
-				author: {
-					connect: {
-						name: item.author,
-					},
-				},
-				website: {
-					connect: {
-						name: website.name,
-					},
-				},
-				textContent: {
-					create: textContentData,
-				},
-			};
-			return db.mutation.createItem({ data: newItemData });
-		});
 
+	if (newItems.length > 0) {
+		const newItemsPromises = createNewItemsPromises(newItems, website);
 		return Promise.all(newItemsPromises).catch((error) =>
 			console.log('Error in AddNewItems: ', error)
 		);
 	} else {
 		return [];
 	}
+}
+
+async function createNewItemsPromises(newItems, website) {
+	await createNewAuthors(newItems, website);
+	return newItems.map((item) => {
+		const { textContent, embeddedYoutubeLinks, embeddedTweets, ...restProps } = item;
+		const slug = getSlugFromUrl(restProps.url);
+		const textContentData = createTextContentObject(textContent);
+
+		const newItemData = {
+			...restProps,
+			slug,
+			embeddedTweets: {
+				set: embeddedTweets,
+			},
+			embeddedYoutubeLinks: { set: embeddedYoutubeLinks },
+			author: {
+				connect: {
+					name: item.author,
+				},
+			},
+			website: {
+				connect: {
+					name: website.name,
+				},
+			},
+			textContent: {
+				create: textContentData,
+			},
+		};
+		return db.mutation.createItem({ data: newItemData });
+	});
+}
+
+async function createNewAuthors(newItems, website) {
+	const authors = newItems.map((item) => item.author);
+	return addNewAuthors(website, authors);
 }
 
 async function getLatestItemPublishDate() {
