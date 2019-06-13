@@ -1,20 +1,21 @@
 require('dotenv').config();
+const express = require('express');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const jwt = require('jsonwebtoken');
 const createServer = require('./utils/createServer');
-// const db = require('./db');
-// const getLgNews = require('./sites/lg');
 const initializeData = require('./utils/initializeData');
 
+const app = express();
+const path = '/graphql';
 const server = createServer();
-server.use(logger('dev'));
+app.use(logger('dev'));
 
 //Todo use express middleware to handle cookies
-server.express.use(cookieParser());
+app.use(cookieParser());
 
 // decode the JWT so we can get the user Id on each request
-server.express.use((req, res, next) => {
+app.use((req, res, next) => {
 	const { token } = req.cookies;
 	//console.log('TOKEN: ', token);
 	if (token) {
@@ -25,18 +26,30 @@ server.express.use((req, res, next) => {
 	next();
 });
 
-server.start(
-	{
-		cors: {
-			credentials: true,
-			//origin: process.env.FRONTEND_URL,
-			origin: [process.env.FRONTEND_URL, 'http://localhost:3000'],
-		},
-		port: 4444,
-	},
-	(props) => {
-		console.log('aa aa  bbbb fasdfasd testing');
-		initializeData();
-		console.log(`server is now running on port ${props.port}`);
-	}
+server.applyMiddleware({ app, path });
+app.listen({ port: 4444 }, () =>
+	console.log(`🚀 Server ready at http://localhost:4444${server.graphqlPath}`)
 );
+
+// server.start(
+// 	{
+// 		cors: {
+// 			credentials: true,
+// 			//origin: process.env.FRONTEND_URL,
+// 			origin: [
+// 				process.env.FRONTEND_URL,
+// 				'http://localhost:3000',
+// 				'http://localhost:3000/playground',
+// 			],
+// 		},
+// 		port: 4444,
+// 		endpoint: '/graphql',
+// 		subscriptions: '/subscriptions',
+// 		playground: '/playground',
+// 	},
+// 	(props) => {
+// 		console.log('aa aa  bbbb fasdfasd testing');
+// 		initializeData();
+// 		console.log(`server is now running on port ${props.port}`);
+// 	}
+// );

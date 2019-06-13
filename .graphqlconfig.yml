@@ -3,7 +3,7 @@ projects:
     schemaPath: './src/schema.graphql'
     extensions:
       endpoints:
-        default: 'http://localhost:4444'
+        default: ${env:APOLLO_ENDPOINT}
   prisma:
     schemaPath: './src/generated/prisma.graphql'
     extensions:

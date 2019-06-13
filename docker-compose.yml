@@ -16,8 +16,8 @@
 
 version: '3'
 services:
-  graphqlyoga-service:
-    container_name: pelifiidi-graphqlyoga-container
+  apollo-service:
+    container_name: pelifiidi-apollo-container
     restart: always
     build:
       context: .
@@ -28,6 +28,10 @@ services:
       PRISMA_ENDPOINT: ${PRISMA_ENDPOINT}
       FRONTEND_URL: ${FRONTEND_URL}
       APP_SECRET: ${APP_SECRET}
+      APOLLO_ENDPOINT: ${APOLLO_ENDPOINT}
+    expose:
+      - 4444
+      - 3000
     ports:
       - 4444:4444
       - 3000:3000
