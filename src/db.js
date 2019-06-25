@@ -5,9 +5,9 @@ const db = new Prisma({
 	typeDefs: 'src/generated/prisma.graphql',
 	// endpoint: 'http://localhost:4466/pelifiidi/dev',
 	// endpoint: 'http://localhost:4466/pelifiidi/dev',
-	endpoint: 'process.env.PRISMA_ENDPOINT',
+	endpoint: process.env.PRISMA_ENDPOINT,
 	// secret: process.env.PRISMA_SECRET,
-	debug: true,
+	debug: false,
 });
 
 module.exports = db;

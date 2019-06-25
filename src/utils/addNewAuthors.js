@@ -10,7 +10,7 @@ async function addNewAuthors(website, authors) {
 					name_in: authors,
 				},
 			},
-			`{ name}`
+			`{name}`
 		)
 	);
 
@@ -18,7 +18,10 @@ async function addNewAuthors(website, authors) {
 		return console.log('Error in existingAuthorsError', existingAuthorsError);
 
 	const existingAuthorsNameList = existingAuthors.map((author) => author.name);
-	const newAuthorsToAdd = getUniqueAuthors(authors.concat(existingAuthorsNameList));
+	const newAuthorsToAdd = getUniqueAuthors(authors).filter(
+		(author) => !existingAuthorsNameList.includes(author)
+	);
+
 	const newAuthorsToAddPromises = newAuthorsToAdd.map((author) => {
 		return db.mutation.createAuthor({
 			data: {

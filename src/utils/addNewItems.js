@@ -12,7 +12,7 @@ async function addNewItems(scrapeFunc, website) {
 		isAfter(item.publishDate, latestItemPublishDate)
 	);
 	console.log('latestItemPublishDate: ', latestItemPublishDate);
-	console.log('newitems: ', newItems);
+	console.log('-----------newitems--------------------: ', newItems);
 
 	if (newItems.length > 0) {
 		const newItemsPromises = createNewItemsPromises(newItems, website);
@@ -24,8 +24,8 @@ async function addNewItems(scrapeFunc, website) {
 	}
 }
 
-async function createNewItemsPromises(newItems, website) {
-	await createNewAuthors(newItems, website);
+function createNewItemsPromises(newItems, website) {
+	createNewAuthors(newItems, website);
 	return newItems.map((item) => {
 		const { textContent, embeddedYoutubeLinks, embeddedTweets, ...restProps } = item;
 		const slug = getSlugFromUrl(restProps.url);
@@ -58,7 +58,7 @@ async function createNewItemsPromises(newItems, website) {
 
 async function createNewAuthors(newItems, website) {
 	const authors = newItems.map((item) => item.author);
-	return addNewAuthors(website, authors);
+	await addNewAuthors(website, authors);
 }
 
 async function getLatestItemPublishDate() {

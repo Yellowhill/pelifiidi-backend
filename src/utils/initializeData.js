@@ -21,8 +21,10 @@ async function initializeLivegamers() {
 	if (lgExistsError) return console.log('Error in initializeLivegamers: ', lgExistsError);
 
 	if (lgExists) {
+		console.log('___start polling__');
 		startPollingItems(getLgNews, lgInfo);
 	} else {
+		console.log('__addNewSite And Start Polling__');
 		addNewSiteAndStartPolling(getLgNews, lgInfo);
 	}
 }
@@ -30,7 +32,7 @@ async function initializeLivegamers() {
 function startPollingItems(scrapeFunc, websiteInfo) {
 	//addNewItems(scrapeFunc, websiteInfo);
 	setInterval(() => {
-		console.log('time: ', new Date());
+		console.log('startPollingItems time: ', new Date());
 		addNewItems(scrapeFunc, websiteInfo);
 	}, 300000); //5min300000
 }

@@ -27,9 +27,10 @@ app.use((req, res, next) => {
 });
 
 server.applyMiddleware({ app, path });
-app.listen({ port: 4444 }, () =>
-	console.log(`🚀 Server ready at http://localhost:4444${server.graphqlPath}`)
-);
+app.listen({ port: 4444 }, () => {
+	initializeData();
+	console.log(`🚀 Server ready at AAAA http://localhost:4444${server.graphqlPath}`);
+});
 
 // server.start(
 // 	{

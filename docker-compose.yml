@@ -43,7 +43,7 @@ services:
       - mongo-service
   prisma-service:
     container_name: pelifiidi-prisma-container
-    image: prismagraphql/prisma:1.33
+    image: prismagraphql/prisma:1.34
     restart: always
     ports:
       - 4466:4466
