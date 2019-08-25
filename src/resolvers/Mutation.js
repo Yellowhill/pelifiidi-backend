@@ -20,8 +20,8 @@ const Mutation = {
 		);
 		//create JWT token for the user
 		const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
-		//Set the jwt as a cookie on the response
-		ctx.response.cookie('token', token, {
+		//Set the jwt as a cookie on the res
+		ctx.res.cookie('token', token, {
 			httpOnly: true,
 			maxAge: 1000 * 60 * 60 * 24 * 365, //1 year cookie
 		});
@@ -30,6 +30,7 @@ const Mutation = {
 	},
 
 	async signin(parent, args, ctx, info) {
+		console.log('SIGNIN CTX: ', ctx);
 		//check if the user exists
 		const user = await ctx.db.query.user(
 			{
@@ -53,7 +54,7 @@ const Mutation = {
 		//generate jwt token
 		const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
 		//set the cookie with the token
-		ctx.response.cookie('token', token, {
+		ctx.res.cookie('token', token, {
 			httpOnly: true,
 			maxAge: 1000 * 60 * 60 * 24 * 365,
 		});
@@ -62,7 +63,7 @@ const Mutation = {
 	},
 
 	signout(parent, args, ctx, info) {
-		ctx.response.clearCookie('token');
+		ctx.res.clearCookie('token');
 		return { message: 'Goodbye' };
 	},
 
@@ -126,7 +127,7 @@ const Mutation = {
 		// 6. Generate JWT
 		const token = jwt.sign({ userId: updatedUser.id }, process.env.APP_SECRET);
 		// 7. Set the JWT cookie
-		ctx.response.cookie('token', token, {
+		ctx.res.cookie('token', token, {
 			httpOnly: true,
 			maxAge: 1000 * 60 * 60 * 24 * 365,
 		});
@@ -136,7 +137,7 @@ const Mutation = {
 
 	async addBookmark(parent, args, ctx, info) {
 		// 1. Check if this is a real user
-		const userFromDb = await ctx.db.query.user({ where: { id: ctx.request.userId } });
+		const userFromDb = await ctx.db.query.user({ where: { id: ctx.req.userId } });
 		if (!userFromDb) {
 			throw new Error(`No such user found`);
 		}
@@ -158,7 +159,7 @@ const Mutation = {
 
 	async removeBookmark(parent, args, ctx, info) {
 		// 1. Check if this is a real user
-		const userFromDb = await ctx.db.query.user({ where: { id: ctx.request.userId } });
+		const userFromDb = await ctx.db.query.user({ where: { id: ctx.req.userId } });
 		if (!userFromDb) {
 			throw new Error(`No such user found`);
 		}

@@ -1,44 +1,45 @@
 {
-	"name": "pelifiidi-backend",
-	"version": "1.0.0",
-	"main": "index.js",
-	"scripts": {
-		"start": "nodemon -e js,graphql -x node src/index.js",
-		"start:prod": "node src/index.js",
-		"debug_og": "nodemon -L -e js,graphql -x node  src/index.js",
-		"debug": "nodemon -L -e js,graphql src/index.js",
-		"test": "jest",
-		"deploy": "prisma deploy",
-		"playground": "graphql playground",
-		"dev": "npm-run-all --parallel debug playground",
-		"dockerup": "docker-compose up -d",
-		"dockerdown": "docker-compose down"
-	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
-	"description": "",
-	"dependencies": {
-		"apollo-server": "^2.6.3",
-		"axios": "^0.18.0",
-		"bcryptjs": "^2.4.3",
-		"cheerio": "^1.0.0-rc.2",
-		"cookie-parser": "^1.4.4",
-		"date-fns": "^1.30.1",
-		"dotenv": "^7.0.0",
-		"express": "^4.16.4",
-		"graphql": "^14.3.1",
-		"graphql-cli": "^3.0.11",
-		"graphql-import": "^0.7.1",
-		"lodash": "^4.17.11",
-		"morgan": "^1.9.1",
-		"nodemailer": "^6.1.1",
-		"prisma": "^1.29.1",
-		"prisma-binding": "^2.3.9"
-	},
-	"devDependencies": {
-		"json-server": "^0.14.2",
-		"nodemon": "^1.18.10",
-		"npm-run-all": "^4.1.5"
-	}
+  "name": "pelifiidi-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon -e js,graphql -x node src/index.js",
+    "start:prod": "node src/index.js",
+    "debug_og": "nodemon -L -e js,graphql -x node  src/index.js",
+    "debug": "nodemon -L -e js,graphql src/index.js",
+    "test": "jest",
+    "deploy": "prisma deploy",
+    "playground": "graphql playground",
+    "dev": "npm-run-all --parallel debug playground",
+    "dockerup": "docker-compose up -d",
+    "dockerdown": "docker-compose down"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "apollo-server": "^2.8.1",
+    "apollo-server-express": "^2.8.1",
+    "axios": "^0.18.0",
+    "bcryptjs": "^2.4.3",
+    "cheerio": "^1.0.0-rc.2",
+    "cookie-parser": "^1.4.4",
+    "date-fns": "^1.30.1",
+    "dotenv": "^7.0.0",
+    "express": "^4.17.1",
+    "graphql": "^14.4.2",
+    "graphql-cli": "^3.0.12",
+    "graphql-import": "^0.7.1",
+    "lodash": "^4.17.15",
+    "morgan": "^1.9.1",
+    "nodemailer": "^6.1.1",
+    "prisma": "^1.34.5",
+    "prisma-binding": "^2.3.15"
+  },
+  "devDependencies": {
+    "json-server": "^0.14.2",
+    "nodemon": "^1.18.10",
+    "npm-run-all": "^4.1.5"
+  }
 }

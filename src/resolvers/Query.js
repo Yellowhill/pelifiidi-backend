@@ -6,12 +6,12 @@ const Query = {
 
 	me(parent, args, ctx, info) {
 		// check if there is a current user ID
-		if (!ctx.request.userId) {
+		if (!ctx.req.userId) {
 			return null;
 		}
 		return ctx.db.query.user(
 			{
-				where: { id: ctx.request.userId },
+				where: { id: ctx.req.userId },
 			},
 			info
 		);
